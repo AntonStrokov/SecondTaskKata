@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 @NoArgsConstructor
 public class UserDaoJDBCImpl implements UserDao {
+
 
 	@Override
 	public void createUsersTable() {
@@ -22,9 +22,8 @@ public class UserDaoJDBCImpl implements UserDao {
 		try (Connection connection = Util.getConnection();
 		     Statement statement = connection.createStatement()) {
 			statement.executeUpdate(sql);
-			System.out.println("Таблица users создана успешно");
 		} catch (SQLException e) {
-			System.out.println("Ошибка при создании таблицы: " + e.getMessage());
+			// Исключение обрабатывается в DAO, но не выводится
 		}
 	}
 
@@ -35,9 +34,8 @@ public class UserDaoJDBCImpl implements UserDao {
 		try (Connection connection = Util.getConnection();
 		     Statement statement = connection.createStatement()) {
 			statement.executeUpdate(sql);
-			System.out.println("Таблица users удалена успешно");
 		} catch (SQLException e) {
-			System.out.println("Ошибка при удалении таблицы: " + e.getMessage());
+			// Исключение обрабатывается в DAO, но не выводится
 		}
 	}
 
@@ -51,10 +49,8 @@ public class UserDaoJDBCImpl implements UserDao {
 			preparedStatement.setString(2, lastName);
 			preparedStatement.setByte(3, age);
 			preparedStatement.executeUpdate();
-			System.out.println("Пользователь " + name + " успешно добавлен"); // Отладочное сообщение
 		} catch (SQLException e) {
-			System.out.println("Ошибка при сохранении пользователя: " + e.getMessage());
-			e.printStackTrace();
+			// Исключение обрабатывается в DAO, но не выводится
 		}
 	}
 
@@ -67,7 +63,7 @@ public class UserDaoJDBCImpl implements UserDao {
 			preparedStatement.setLong(1, id);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println("Ошибка при удалении пользователя: " + e.getMessage());
+			// Исключение обрабатывается в DAO, но не выводится
 		}
 	}
 
@@ -76,13 +72,9 @@ public class UserDaoJDBCImpl implements UserDao {
 		List<User> users = new ArrayList<>();
 		String sql = "SELECT id, name, last_name, age FROM users";
 
-		System.out.println("Пытаемся получить пользователей из БД..."); // Отладочное сообщение
-
 		try (Connection connection = Util.getConnection();
 		     Statement statement = connection.createStatement();
 		     ResultSet resultSet = statement.executeQuery(sql)) {
-
-			System.out.println("Запрос выполнен, обрабатываем результаты..."); // Отладочное сообщение
 
 			while (resultSet.next()) {
 				User user = new User();
@@ -91,18 +83,10 @@ public class UserDaoJDBCImpl implements UserDao {
 				user.setLastName(resultSet.getString("last_name"));
 				user.setAge(resultSet.getByte("age"));
 				users.add(user);
-				System.out.println("Добавлен пользователь: " + user); // Отладочное сообщение
 			}
-
-			System.out.println("Всего получено пользователей: " + users.size()); // Отладочное сообщение
-
 		} catch (SQLException e) {
-			System.out.println("Ошибка при получении пользователей: " + e.getMessage());
-			e.printStackTrace();
-			// В случае ошибки возвращаем пустой список вместо null
-			return new ArrayList<>();
+			// Исключение обрабатывается в DAO, но не выводится
 		}
-
 		return users;
 	}
 
@@ -113,9 +97,8 @@ public class UserDaoJDBCImpl implements UserDao {
 		try (Connection connection = Util.getConnection();
 		     Statement statement = connection.createStatement()) {
 			statement.executeUpdate(sql);
-			System.out.println("Таблица users очищена успешно");
 		} catch (SQLException e) {
-			System.out.println("Ошибка при очистке таблицы: " + e.getMessage());
+			// Исключение обрабатывается в DAO, но не выводится
 		}
 	}
 }

@@ -28,12 +28,8 @@ public class Main {
 
 		// Получение всех User из базы и вывод в консоль
 		List<User> users = userService.getAllUsers();
-		if (users != null) {
-			for (User user : users) {
-				System.out.println(user);
-			}
-		} else {
-			System.out.println("Список пользователей равен null!");
+		for (User user : users) {
+			System.out.println(user);
 		}
 
 		// Очистка таблицы User(ов)
