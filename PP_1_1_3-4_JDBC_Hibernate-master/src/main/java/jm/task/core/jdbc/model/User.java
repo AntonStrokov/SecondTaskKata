@@ -4,10 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import javax.persistence.*;
 
 @Entity
@@ -28,4 +24,11 @@ public class User {
 
 	@Column(name = "age")
 	private Byte age;
+
+	// Конструктор без id для удобства
+	public User(String name, String lastName, Byte age) {
+		this.name = name;
+		this.lastName = lastName;
+		this.age = age;
+	}
 }
