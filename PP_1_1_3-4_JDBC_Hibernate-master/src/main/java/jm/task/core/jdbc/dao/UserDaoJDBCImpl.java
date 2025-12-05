@@ -3,13 +3,15 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+@Slf4j
 @NoArgsConstructor
 public class UserDaoJDBCImpl implements UserDao {
-
 
 	@Override
 	public void createUsersTable() {
@@ -21,9 +23,13 @@ public class UserDaoJDBCImpl implements UserDao {
 
 		try (Connection connection = Util.getConnection();
 		     Statement statement = connection.createStatement()) {
+
 			statement.executeUpdate(sql);
+			log.info("Таблица users успешно создана");
+
 		} catch (SQLException e) {
-			// Исключение обрабатывается в DAO, но не выводится
+			log.error("Ошибка при создании таблицы users", e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -33,9 +39,13 @@ public class UserDaoJDBCImpl implements UserDao {
 
 		try (Connection connection = Util.getConnection();
 		     Statement statement = connection.createStatement()) {
+
 			statement.executeUpdate(sql);
+			log.info("Таблица users успешно удалена");
+
 		} catch (SQLException e) {
-			// Исключение обрабатывается в DAO, но не выводится
+			log.error("Ошибка при удалении таблицы users", e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -45,12 +55,17 @@ public class UserDaoJDBCImpl implements UserDao {
 
 		try (Connection connection = Util.getConnection();
 		     PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
 			preparedStatement.setString(1, name);
 			preparedStatement.setString(2, lastName);
 			preparedStatement.setByte(3, age);
 			preparedStatement.executeUpdate();
+
+			log.info("Пользователь {} {} добавлен в базу", name, lastName);
+
 		} catch (SQLException e) {
-			// Исключение обрабатывается в DAO, но не выводится
+			log.error("Ошибка при добавлении пользователя {} {}", name, lastName, e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -60,10 +75,15 @@ public class UserDaoJDBCImpl implements UserDao {
 
 		try (Connection connection = Util.getConnection();
 		     PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
 			preparedStatement.setLong(1, id);
 			preparedStatement.executeUpdate();
+
+			log.info("Пользователь с ID {} удалён", id);
+
 		} catch (SQLException e) {
-			// Исключение обрабатывается в DAO, но не выводится
+			log.error("Ошибка при удалении пользователя с ID {}", id, e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -84,9 +104,14 @@ public class UserDaoJDBCImpl implements UserDao {
 				user.setAge(resultSet.getByte("age"));
 				users.add(user);
 			}
+
+			log.info("Получено {} пользователей из базы", users.size());
+
 		} catch (SQLException e) {
-			// Исключение обрабатывается в DAO, но не выводится
+			log.error("Ошибка при получении всех пользователей", e);
+			throw new RuntimeException(e);
 		}
+
 		return users;
 	}
 
@@ -96,9 +121,13 @@ public class UserDaoJDBCImpl implements UserDao {
 
 		try (Connection connection = Util.getConnection();
 		     Statement statement = connection.createStatement()) {
+
 			statement.executeUpdate(sql);
+			log.info("Таблица users успешно очищена");
+
 		} catch (SQLException e) {
-			// Исключение обрабатывается в DAO, но не выводится
+			log.error("Ошибка при очистке таблицы users", e);
+			throw new RuntimeException(e);
 		}
 	}
 }
